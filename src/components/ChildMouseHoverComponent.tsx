@@ -1,45 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
+import HigherOrderComponent from './HigherOrderComponent';
 
-/*
-Higher Order functional Component 'higherOrderComponent'
-Taking 'ChildComponent' child component as a parameter
-*/
-const higherOrderComponent = (ChildComponent: Function) => {
-    /*
-    return new component
-    */
-    return () => {
-        return <ChildComponent />
-    }
+interface PropTypes {
+    isHover: boolean,
+    textColor: string,
 }
 
 /*
 Child functional Component 'ChildMouseHoverComponent'
 Returning text with mouse over, leave and click effects
 */
-function ChildMouseHoverComponent() {
-    const [isHover, setIsHover] = useState<boolean>(false);
-    const [textColor, setTextColor] = useState<string>('black');
-    let onTextClickFun = () => {
-        const color = textColor === 'red' ? 'black' : 'red';
-        setTextColor(color);
-    }
+function ChildMouseHoverComponent(props: PropTypes) {
+    const { textColor, isHover, ...prevProps } = props;
     return (
         <div>
             <h2
-                style={{ color: textColor, cursor: 'pointer' }}
-                onMouseOver={() => setIsHover(true)}
-                onMouseLeave={() => setIsHover(false)}
-                onClick={() => onTextClickFun()}
-                title='Change color on click'
-
-            >Mouse {isHover ? 'Over' : 'Leave'}</h2>
+             {...prevProps}
+             style={{ color: textColor, cursor: 'pointer' }}>
+             Mouse {isHover ? 'Over' : 'Leave'}
+            </h2>
         </div>
     )
 }
 
 /*
-Export HOC component 'higherOrderComponent'
-Pass 'ChildMouseHoverComponent' component in 'higherOrderComponent' as a argument
+Export HOC component 'HigherOrderComponent'
+Pass 'ChildMouseHoverComponent' component in 'HigherOrderComponent' as a argument
 */
-export default higherOrderComponent(ChildMouseHoverComponent);
+export default HigherOrderComponent(ChildMouseHoverComponent);
